@@ -1,0 +1,29 @@
+import discord
+import random
+import asyncio
+
+class MyClient(discord.Client):
+    async def on_ready(self):
+        print('Logged in as {0.user}'.format(self))
+        channels_to_send = ["960734457986445312", "1099860876149936299"]
+
+        while True:
+            for channel_id in channels_to_send:
+                channel = self.get_channel(int(channel_id))
+                if channel:
+                    try:
+                        random_number = ''.join(random.choice('0123456789') for _ in range(27))
+                        
+                        await channel.send(random_number)
+                        
+                    except Exception as e:
+                        print(f"An error occurred while sending a message: {e}")
+                else:
+                    print(f"Channel with ID {channel_id} not found.")
+            
+            await asyncio.sleep(random.uniform(3, 6))
+
+intents = discord.Intents.default()
+intents.message_content = True
+client = MyClient(intents=intents)
+client.run('mytoken')
